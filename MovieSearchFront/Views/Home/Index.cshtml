@@ -1,0 +1,52 @@
+﻿@using System.Web.Helpers;
+@model  IEnumerable<MovieSearchFront.Models.MovieModel>
+@{
+    ViewBag.Title = "Index";
+    WebGrid grid = new WebGrid(Model, rowsPerPage: 50);
+}
+ <div id="Information">
+     <link rel="stylesheet" type="text/css" href="~/Styles/GridViewStyle.css" />
+     <div id="searchParameters" class="table">
+         <h3>Search Movie</h3><br />
+         <form method="get">
+             <div>
+                 <div style="padding-bottom:5px">
+                     Movie Name:  @Html.TextBox("movieName", null, new
+                            {
+                                autocomplete = "off",
+                                tabindex = 1,
+                                maxlength = "5",
+                                onchange = "$('form').submit()"
+                            })
+                 </div>
+                 <input id="searchSubmit" type="submit" value="Search" tabindex="7" style="margin-left:200px" />
+                 <div>
+                 </div>
+             </div>
+         </form>
+
+     </div>
+@if (Model != null) {
+
+@grid.GetHtml(
+
+    tableStyle: "table", 
+    fillEmptyRows: true,
+    headerStyle: "header", 
+    footerStyle: "grid-footer", 
+    mode: WebGridPagerModes.All, 
+    firstText: "<< First",
+    previousText: "< Prev",
+    nextText: "Next >",
+    lastText: "Last >>",
+
+    columns: new[]  
+    {
+        grid.Column("Title"), 
+        grid.Column("Year"),
+        grid.Column("Id"),
+        grid.Column("Url",
+            format: (item) => new HtmlString("https://www.youtube.com/watch?v="+item.Url).ToString()
+        )
+   })}
+</div>
